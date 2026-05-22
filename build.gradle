@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    implementation 'com.h2database:h2:2.2.224'
+}
+
+application {
+    mainClass = 'org.example.DatabaseQueryService'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.register('initDb', JavaExec) {
+    group = 'homework'
+    description = 'Creates database tables from sql/init_db.sql'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.example.DatabaseInitService'
+}
+
+tasks.register('populateDb', JavaExec) {
+    group = 'homework'
+    description = 'Populates database tables from sql/populate_db.sql'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.example.DatabasePopulateService'
+}
+
+tasks.register('runQueries', JavaExec) {
+    group = 'homework'
+    description = 'Runs SELECT queries from sql/*.sql'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.example.DatabaseQueryService'
+}
